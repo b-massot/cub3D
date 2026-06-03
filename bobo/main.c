@@ -1,46 +1,48 @@
 #include "cub3d.h"
 
-static void	draw_vertical_bar(void *mlx, void *win, int start_x, int end_x,
-	int color)
+typedef struct s_app
 {
-	int	x;
-	int	y;
+	void	*mlx;
+	void	*win;
+	void	*img;
+} 	t_app;
 
-	y = 0;
-	while (y < 600)
-	{
-		x = start_x;
-		while (x < end_x)
-		{
-			mlx_pixel_put(mlx, win, x, y, color);
-			x++;
-		}
-		y++;
-	}
+static int	close_window(t_app *app)
+{
+	if (app->img)
+		mlx_destroy_image(app->mlx, app->img);
+	if (app->win)
+		mlx_destroy_window(app->mlx, app->win);
+	exit(0);
+	return (0);
 }
 
-static int	close_window(void *param)
+static int	key_hook(int keycode, t_app *app)
 {
-	(void)param;
-	exit(0);
+	if (keycode == ESC)
+		close_window(app);
 	return (0);
 }
 
 int	main(void)
 {
-	void	*mlx;
-	void	*win;
+	t_app	app;
+	int	img_w;
+	int	img_h;
 
-	mlx = mlx_init();
-	if (!mlx)
+	app.mlx = mlx_init();
+	if (!app.mlx)
 		return (1);
-	win = mlx_new_window(mlx, 900, 600, "cub3D proof of life");
-	if (!win)
+	app.win = mlx_new_window(app.mlx, 1024, 1024, "cub3D image test");
+	if (!app.win)
 		return (1);
-	draw_vertical_bar(mlx, win, 0, 300, 0xFFFFFF);
-	draw_vertical_bar(mlx, win, 300, 600, 0xF4D03F);
-	draw_vertical_bar(mlx, win, 600, 900, 0x58D68D);
-	mlx_hook(win, 17, 0, close_window, NULL);
-	mlx_loop(mlx);
+	app.img = mlx_xpm_file_to_image(app.mlx, "textures/texturize_voronoi_55_2048.xpm", &img_w, &img_h);
+	if (!app.img)
+		return (write(2, "Error: cannot load textures/demo.xpm\n", 37), 1);
+	mlx_put_image_to_window(app.mlx, app.win, app.img, (1024 - img_w) / 2,
+		(1024 - img_h) / 2);
+	mlx_hook(app.win, 2, 1L << 0, key_hook, &app);
+	mlx_hook(app.win, 17, 0, close_window, &app);
+	mlx_loop(app.mlx);
 	return (0);
 }
