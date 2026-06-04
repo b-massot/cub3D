@@ -6,7 +6,7 @@
 /*   By: ajeanren <ajeanren@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 09:25:05 by ajeanren          #+#    #+#             */
-/*   Updated: 2026/06/04 13:46:27 by ajeanren         ###   ########.fr       */
+/*   Updated: 2026/06/04 16:09:11 by ajeanren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,14 @@
 /* ---------------------
 		MACROS
 --------------------- */
-
+typedef enum e_error_parsing
+{
+    FAILED_MEMORY_ALLOCATION,
+	MAP_EMPTY,
+	COLOR_INVALID,
+	TEXTURE_INVALID,
+	
+} t_error;
 
 /* ---------------------
 		STRUCTURES
@@ -43,11 +50,11 @@ typedef	struct s_map_color{
 	char	*east;
 }	t_map_color;
 
-typedef	struct s_map{
+typedef	struct s_map_grid{
 	char	**grid;
 	int		width;
 	int		height;
-}	t_map;
+}	t_map_grid;
 
 typedef	struct s_map_player{
 	char	direction;
@@ -57,11 +64,13 @@ typedef	struct s_map_player{
 
 typedef	struct	s_map_info{
 	int				fd;
+	char			**file;
 	int				validity;
 	char 			*path;
 	int 			height;
 	int 			width;
-	t_map			map;
+	int				error_code;
+	t_map_grid		map_grid;
 	t_map_color		colors;
 	t_map_player	player;
 }	t_map_info;
@@ -72,10 +81,9 @@ typedef	struct	s_map_info{
 --------------------- */
 
 /* MAIN */
-int main(int argc, char **argv);
 
 /* ERROR */
-int print_error(char *message);
+int print_error(char *message, int erro_code);
 
 /* CHECKER */
 int	check_extension(char *str);
