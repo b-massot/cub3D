@@ -14,7 +14,7 @@ LIBFT_DIR   = ../libft
 LIBFT       = $(LIBFT_DIR)/libft.a
 
 # Liste de tes fichiers sources
-SRC_FILES   = main_adri.c error_adri.c checker_adri.c parsing_adri.c utils_adri.c
+SRC_FILES   = main_adri.c error_adri.c checker_adri.c parsing_adri.c utils_adri.c free_map_adri.c
 
 # Reconstruction des chemins complets
 SRCS        = $(addprefix $(SRCDIR)/, $(SRC_FILES))

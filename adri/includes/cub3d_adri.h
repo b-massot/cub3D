@@ -6,7 +6,7 @@
 /*   By: ajeanren <ajeanren@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 09:25:05 by ajeanren          #+#    #+#             */
-/*   Updated: 2026/06/04 16:09:11 by ajeanren         ###   ########.fr       */
+/*   Updated: 2026/06/04 16:16:56 by ajeanren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,26 @@ typedef	struct	s_map_info{
 /* MAIN */
 
 /* ERROR */
-int print_error(char *message, int erro_code);
+char 	*get_error_text(int code);
+int 	print_error(char *message, int erro_code);
+
+/* FREE */
+void    free_file_array(char **file);
+void    free_map_colors(t_map_color *colors);
+void    free_map(t_map_info *map);
 
 /* CHECKER */
-int	check_extension(char *str);
-int	check_path(char *str);
+int		check_extension(char *str);
+int		check_path(char *str);
+int		check_map_validity(t_map_info *map);
 
 /* PARSING */
+int		parsing_map(t_map_info *map);
+void	read_map(t_map_info *map);
+int		init_map(t_map_info	*map, char	*str);
+
+/* UTILS */
+int		count_lines(char *path);
+int		fill_file_array(t_map_info *map);
 
 #endif
