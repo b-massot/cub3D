@@ -3,7 +3,7 @@ NAME        = cub3d_adri
 
 # Compilateur et flags
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -I $(INCDIR) -I $(LIBFT_DIR)
+CFLAGS      = -Wall -Wextra -Werror -g -I $(INCDIR) -I $(LIBFT_DIR)
 
 # Dossiers du projet
 SRCDIR      = sources
@@ -14,7 +14,7 @@ LIBFT_DIR   = ../libft
 LIBFT       = $(LIBFT_DIR)/libft.a
 
 # Liste de tes fichiers sources
-SRC_FILES   = main.c utils.c parsing.c
+SRC_FILES   = main_adri.c error_adri.c checker_adri.c parsing_adri.c utils_adri.c
 
 # Reconstruction des chemins complets
 SRCS        = $(addprefix $(SRCDIR)/, $(SRC_FILES))
@@ -30,7 +30,7 @@ $(LIBFT):
 # Compilation de l'exécutable avec la libft
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -L $(LIBFT_DIR) -lft -o $(NAME)
-	@echo "🎉 $(NAME) compilé avec succès !"
+	@echo "$(NAME) compilé avec succès !"
 
 # Règle générique pour les fichiers objets
 $(SRCDIR)/%.o: $(SRCDIR)/%.c
@@ -40,15 +40,16 @@ $(SRCDIR)/%.o: $(SRCDIR)/%.c
 clean:
 	rm -f $(OBJS)
 	@make -C $(LIBFT_DIR) clean
-	@echo "🧹 Fichiers objets supprimés."
+	@echo "Fichiers objets supprimés."
 
 # Nettoyage complet (projet + libft)
 fclean: clean
 	rm -f $(NAME)
 	@make -C $(LIBFT_DIR) fclean
-	@echo "🗑️  Exécutables et archives supprimés."
+	@echo "Exécutables et archives supprimés."
 
 # Recommencer à zéro
 re: fclean all
 
+.SILENT:
 .PHONY: all clean fclean re
