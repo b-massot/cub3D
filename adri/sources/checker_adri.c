@@ -6,7 +6,7 @@
 /*   By: ajeanren <ajeanren@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 09:58:13 by ajeanren          #+#    #+#             */
-/*   Updated: 2026/06/07 13:02:05 by ajeanren         ###   ########.fr       */
+/*   Updated: 2026/06/07 15:30:17 by ajeanren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,8 @@ int	check_extension(char *str)
 
 int	check_path(char *str)
 {
-	int	fd;
+	int		fd;
 
-	if (!str)
-		return (0);
 	fd = open(str, O_RDONLY);
 	if (fd == -1)
 		return (0);
