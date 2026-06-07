@@ -6,7 +6,7 @@
 /*   By: ajeanren <ajeanren@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 09:25:05 by ajeanren          #+#    #+#             */
-/*   Updated: 2026/06/04 16:16:56 by ajeanren         ###   ########.fr       */
+/*   Updated: 2026/06/07 13:08:21 by ajeanren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ typedef enum e_error_parsing
 	MAP_EMPTY,
 	COLOR_INVALID,
 	TEXTURE_INVALID,
-	
+	DOUBLE_IDENTIFIERS,
+	INVALID_MAP,
 } t_error;
 
 /* ---------------------
@@ -98,11 +99,15 @@ int		check_map_validity(t_map_info *map);
 
 /* PARSING */
 int		parsing_map(t_map_info *map);
-void	read_map(t_map_info *map);
+int		read_map(t_map_info *map);
 int		init_map(t_map_info	*map, char	*str);
 
 /* UTILS */
 int		count_lines(char *path);
 int		fill_file_array(t_map_info *map);
+int		check_color(char *line, int pos);
+int		check_texture(char *line, int pos);
+int		check_identifier_type(char *line);
+int		check_empty_line(char *line);
 
 #endif
