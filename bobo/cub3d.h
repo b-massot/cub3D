@@ -32,7 +32,7 @@
 # define RIGHT 65363
 
 # define MOVE_SPEED 0.08
-# define ROT_SPEED 0.05
+# define ROT_SPEED 0.03
 
 # define MINIMAP_SCALE 12
 
@@ -79,8 +79,9 @@ typedef struct s_ray
 	//length of ray from one x or y-side to next x or y-side
     double	delta_dist_x; // distance to go from 1 x-side to next x-side
     double	delta_dist_y;
-    double	perp_wall_dist;
-
+    double	perp_wall_dist; //Calculate distance projected on camera direction
+							// (Euclidean distance would give fisheye effect!)
+							
 	//what direction to step in x or y-direction (either +1 or -1)
     int		step_x; // always +1 or -1
     int		step_y; // when we advance the ray, and so the squares

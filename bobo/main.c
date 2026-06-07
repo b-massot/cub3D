@@ -1,16 +1,6 @@
 #include "cub3d.h"
 
-static char	*g_map_data[] = {
-	"111111111111",
-	"100000000001",
-	"101111100001",
-	"100000100001",
-	"100011100001",
-	"100000000001",
-	"100000000001",
-	"111111111111",
-	NULL
-};
+static void	free_map(t_map *map);
 
 static int	is_wall(t_game *game, int x, int y)
 {
@@ -237,6 +227,7 @@ static int	close_window(t_game *game)
 		mlx_destroy_display(game->mlx);
 		free(game->mlx);
 	}
+	free_map(&game->map);
 	exit(0);
 	return (0);
 }
@@ -277,25 +268,71 @@ static int	key_release(int keycode, t_game *game)
 	return (0);
 }
 
-static void	init_map_and_player(t_game *game)
+static void	free_map(t_map *map)
 {
-	game->map.grid = g_map_data;
-	game->map.height = 8;
-	game->map.width = 12;
-	game->player.x = 2.5;
-	game->player.y = 2.5;
+	int	i;
+
+	if (!map->grid)
+		return ;
+	i = 0;
+	while (i < map->height)
+		free(map->grid[i++]);
+	free(map->grid);
+	map->grid = NULL;
+}
+
+static int	load_map(t_game *game, const char *path)
+{
+	int		fd;
+	char	*line;
+	char	**grid;
+	int		i;
+	int		len;
+
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+		return (0);
+	grid = ft_calloc(1024, sizeof(char *));
+	if (!grid)
+		return (close(fd), 0);
+	i = 0;
+	line = get_next_line(fd);
+	while (line && i < 1023)
+	{
+		len = (int)ft_strlen(line);
+		if (len > 0 && line[len - 1] == '\n')
+			line[--len] = '\0';
+		grid[i++] = line;
+		if (len > game->map.width)
+			game->map.width = len;
+		line = get_next_line(fd);
+	}
+	close(fd);
+	game->map.grid = grid;
+	game->map.height = i;
+	return (i > 0);
+}
+
+static void	init_player(t_game *game)
+{
+	game->player.x = 1.5;
+	game->player.y = 1.5;
 	game->player.dir_x = 1.0;
 	game->player.dir_y = 0.0;
 	game->player.plane_x = 0.0;
 	game->player.plane_y = 0.66;
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_game	game;
 
+	if (argc != 2)
+		return (write(2, "Usage: ./cub3D <map.map>\n", 25), 1);
 	ft_bzero(&game, sizeof(t_game));
-	init_map_and_player(&game);
+	if (!load_map(&game, argv[1]))
+		return (write(2, "Error: failed to load map\n", 26), 1);
+	init_player(&game);
 	game.mlx = mlx_init();
 	if (!game.mlx)
 		return (write(2, "Error: mlx_init failed\n", 23), 1);
