@@ -74,7 +74,7 @@ static void	init_ray(t_game *game, t_ray *ray, int x)
 	ray->map_x = (int)game->player.x;
 	ray->map_y = (int)game->player.y;
 	if (ray->ray_dir_x == 0)
-		ray->delta_dist_x = 1e30;
+		ray->delta_dist_x = 1e30; // arbitrary number to avoid division by zero
 	else
 		ray->delta_dist_x = fabs(1.0 / ray->ray_dir_x);
 	if (ray->ray_dir_y == 0)
