@@ -1,54 +1,57 @@
-# Nom de l'exécutable
-NAME        = cub3d_adri
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#   Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#   By: ajeanren <ajeanren@student.42lausanne.c    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#   Created: 2026/06/08 10:00:00 by ajeanren          #+#    #+#              #
+#   Updated: 2026/06/08 10:00:00 by ajeanren         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-# Compilateur et flags
-CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -g -I $(INCDIR) -I $(LIBFT_DIR)
+NAME		= cub3d_adri
+CC			= cc
+CFLAGS		= -Wall -Wextra -Werror -g -I $(INCDIR) -I $(LIBFT_DIR)
+SRCDIR		= sources
+INCDIR		= includes
+LIBFT_DIR	= ../libft
+LIBFT		= $(LIBFT_DIR)/libft.a
 
-# Dossiers du projet
-SRCDIR      = sources
-INCDIR      = includes
+SRC_FILES	= main_adri.c \
+			  error_adri.c \
+			  checker_adri.c \
+			  utils_adri.c \
+			  free_map_adri.c \
+			  parsing_main_adri.c \
+			  parsing_identifiers_adri.c \
+			  validation_adri.c
 
-# Configuration de la Libft (dossier parent d'où le '../')
-LIBFT_DIR   = ../libft
-LIBFT       = $(LIBFT_DIR)/libft.a
+SRCS		= $(addprefix $(SRCDIR)/, $(SRC_FILES))
+OBJS		= $(SRCS:.c=.o)
 
-# Liste de tes fichiers sources
-SRC_FILES   = main_adri.c error_adri.c checker_adri.c parsing_adri.c utils_adri.c free_map_adri.c
-
-# Reconstruction des chemins complets
-SRCS        = $(addprefix $(SRCDIR)/, $(SRC_FILES))
-OBJS        = $(SRCS:.c=.o)
-
-# Règle par défaut
 all: $(LIBFT) $(NAME)
 
-# Compilation de la libft en appelant son propre Makefile
 $(LIBFT):
 	@make -C $(LIBFT_DIR)
 
-# Compilation de l'exécutable avec la libft
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -L $(LIBFT_DIR) -lft -o $(NAME)
-	@echo "$(NAME) compilé avec succès !"
+	@echo "$(NAME) compiled successfully!"
 
-# Règle générique pour les fichiers objets
 $(SRCDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Nettoyage des fichiers objets du projet
 clean:
 	rm -f $(OBJS)
 	@make -C $(LIBFT_DIR) clean
-	@echo "Fichiers objets supprimés."
+	@echo "Object files removed."
 
-# Nettoyage complet (projet + libft)
 fclean: clean
 	rm -f $(NAME)
 	@make -C $(LIBFT_DIR) fclean
-	@echo "Exécutables et archives supprimés."
+	@echo "Executables and archives removed."
 
-# Recommencer à zéro
 re: fclean all
 
 .SILENT:

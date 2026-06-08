@@ -6,13 +6,12 @@
 /*   By: ajeanren <ajeanren@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 12:48:44 by ajeanren          #+#    #+#             */
-/*   Updated: 2026/06/07 15:23:57 by ajeanren         ###   ########.fr       */
+/*   Updated: 2026/06/08 13:51:31 by ajeanren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d_adri.h"
 
-/* Count lines in file, returns 0 on open error. */
 int	count_lines(char *path)
 {
 	int		count;
@@ -34,7 +33,6 @@ int	count_lines(char *path)
 	return (count);
 }
 
-/* Allocate and fill file array with all lines from .cub file. */
 int	fill_file_array(t_map_info *map)
 {
 	int		i;
@@ -63,7 +61,6 @@ int	fill_file_array(t_map_info *map)
 	return (1);
 }
 
-/* Return 1 if line contains only whitespace. */
 int	check_empty_line(char *line)
 {
 	int	i;
@@ -78,7 +75,6 @@ int	check_empty_line(char *line)
 	return (1);
 }
 
-/* Return 2 for texture ids, 1 for color ids, 0 otherwise. */
 int	check_identifier_type(char *line)
 {
 	int	i;
@@ -99,26 +95,6 @@ int	check_identifier_type(char *line)
 	return (0);
 }
 
-/* Get position where value starts after identifier. */
-int	get_value_start(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i] == ' ' || line[i] == '\t')
-		i++;
-	if (line[i] == '\0' || line[i] == '\n')
-		return (-1);
-	while (line[i] && line[i] != ' ' && line[i] != '\t')
-		i++;
-	while (line[i] == ' ' || line[i] == '\t')
-		i++;
-	if (line[i] == '\0' || line[i] == '\n')
-		return (-1);
-	return (i);
-}
-
-/* Validate texture path: check .xpm extension and file access. */
 int	check_texture(char *line, int pos)
 {
 	int	end;
@@ -145,7 +121,6 @@ int	check_texture(char *line, int pos)
 	return (check_path(&line[pos]));
 }
 
-/* Validate RGB color format: "R,G,B" with values in [0, 255]. */
 int	check_color(char *line, int pos)
 {
 	int	value;

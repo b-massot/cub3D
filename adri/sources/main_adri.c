@@ -6,13 +6,12 @@
 /*   By: ajeanren <ajeanren@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 13:48:06 by ajeanren          #+#    #+#             */
-/*   Updated: 2026/06/07 15:30:25 by ajeanren         ###   ########.fr       */
+/*   Updated: 2026/06/08 13:50:15 by ajeanren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d_adri.h"
 
-/* Extract map grid from file and store in structure. */
 static int	extract_map_grid(t_map_info *map, int start_line)
 {
 	int		i;
@@ -47,18 +46,8 @@ static int	extract_map_grid(t_map_info *map, int start_line)
 	return (1);
 }
 
-/* Display all parsed map information from structure. */
-void	print_map_info(t_map_info *map)
+static void	print_textures(t_map_info *map)
 {
-	int	i;
-
-	ft_putstr_fd("\n=== MAP INFORMATION ===\n", 1);
-	ft_putstr_fd("Path: ", 1);
-	ft_putstr_fd(map->path, 1);
-	ft_putstr_fd("\n", 1);
-	ft_putstr_fd("Validity: ", 1);
-	ft_putnbr_fd(map->validity, 1);
-	ft_putstr_fd("\n\n", 1);
 	ft_putstr_fd("--- TEXTURES ---\n", 1);
 	ft_putstr_fd("North (NO): ", 1);
 	if (map->colors.north)
@@ -76,6 +65,10 @@ void	print_map_info(t_map_info *map)
 	if (map->colors.east)
 		ft_putstr_fd(map->colors.east, 1);
 	ft_putstr_fd("\n\n", 1);
+}
+
+static void	print_colors(t_map_info *map)
+{
 	ft_putstr_fd("--- COLORS ---\n", 1);
 	ft_putstr_fd("Floor (F): ", 1);
 	if (map->colors.floor)
@@ -97,6 +90,12 @@ void	print_map_info(t_map_info *map)
 		ft_putnbr_fd(map->colors.ceiling[2], 1);
 	}
 	ft_putstr_fd("\n\n", 1);
+}
+
+static void	print_player_and_grid(t_map_info *map)
+{
+	int	i;
+
 	ft_putstr_fd("--- PLAYER ---\n", 1);
 	ft_putstr_fd("Direction: ", 1);
 	ft_putchar_fd(map->player.direction, 1);
@@ -123,6 +122,20 @@ void	print_map_info(t_map_info *map)
 		ft_putstr_fd("\n", 1);
 		i++;
 	}
+}
+
+static void	print_map_info(t_map_info *map)
+{
+	ft_putstr_fd("\n=== MAP INFORMATION ===\n", 1);
+	ft_putstr_fd("Path: ", 1);
+	ft_putstr_fd(map->path, 1);
+	ft_putstr_fd("\n", 1);
+	ft_putstr_fd("Validity: ", 1);
+	ft_putnbr_fd(map->validity, 1);
+	ft_putstr_fd("\n\n", 1);
+	print_textures(map);
+	print_colors(map);
+	print_player_and_grid(map);
 	ft_putstr_fd("\n=== END MAP INFORMATION ===\n\n", 1);
 }
 
@@ -133,7 +146,7 @@ int	main(int argc, char **argv)
 
 	if (argc != 2 || !argv[1][0] || !check_extension(argv[1])
 		|| !check_path(argv[1]))
-		return (print_error("Invalid arguments, extension (.cub) or path", 1));
+		return (print_error("Invalid arguments", 1));
 	map = malloc(sizeof(t_map_info));
 	if (!map)
 		return (print_error("Invalid memory allocation", 1));

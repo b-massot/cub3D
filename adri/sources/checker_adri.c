@@ -6,7 +6,7 @@
 /*   By: ajeanren <ajeanren@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 09:58:13 by ajeanren          #+#    #+#             */
-/*   Updated: 2026/06/07 15:30:17 by ajeanren         ###   ########.fr       */
+/*   Updated: 2026/06/08 13:50:54 by ajeanren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 int	check_extension(char *str)
 {
-	int len;
-	
+	int	len;
+
 	len = ft_strlen(str);
 	if (len < 5)
 		return (0);
-	if (ft_strncmp(&str[len-4], ".cub", 4) == 0)
+	if (ft_strncmp(&str[len - 4], ".cub", 4) == 0)
 		return (1);
 	return (0);
 }
 
 int	check_path(char *str)
 {
-	int		fd;
+	int	fd;
 
 	fd = open(str, O_RDONLY);
 	if (fd == -1)
@@ -38,7 +38,7 @@ int	check_path(char *str)
 static int	check_all_identifiers_present(int *found)
 {
 	int	i;
- 
+
 	i = 0;
 	while (i < 6)
 	{
