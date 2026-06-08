@@ -6,7 +6,7 @@
 /*   By: ajeanren <ajeanren@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 09:58:13 by ajeanren          #+#    #+#             */
-/*   Updated: 2026/06/08 13:50:54 by ajeanren         ###   ########.fr       */
+/*   Updated: 2026/06/08 14:49:43 by ajeanren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,17 +71,32 @@ static int	get_id_index(char *line)
 	return (-1);
 }
 
+static int	check_line_validity(int *found, int idx, t_map_info *map, int *in_map)
+{
+	if (!*in_map && idx >= 0)
+	{
+		if (found[idx] == 1)
+			return ((map->error_code = DOUBLE_IDENTIFIERS), 0);
+		found[idx] = 1;
+		return (1);
+	}
+	if (!*in_map && idx < 0)
+	{
+		*in_map = 1;
+		return (1);
+	}
+	return (1);
+}
+
 int	check_map_validity(t_map_info *map)
 {
 	int	i;
 	int	found[6];
 	int	in_map;
-	int	map_start;
 	int	idx;
 
 	i = 0;
 	in_map = 0;
-	map_start = -1;
 	ft_memset(found, 0, sizeof(found));
 	while (map->file[i])
 	{
@@ -91,24 +106,13 @@ int	check_map_validity(t_map_info *map)
 			continue ;
 		}
 		idx = get_id_index(map->file[i]);
-		if (!in_map && idx >= 0)
-		{
-			if (found[idx] == 1)
-				return ((map->error_code = DOUBLE_IDENTIFIERS), 0);
-			found[idx] = 1;
-			i++;
-			continue ;
-		}
-		if (!in_map)
-		{
-			in_map = 1;
-			map_start = i;
-		}
+		if (!check_line_validity(found, idx, map, &in_map))
+			return (0);
 		i++;
 	}
 	if (!check_all_identifiers_present(found))
 		return ((map->error_code = TEXTURE_INVALID), 0);
-	if (map_start == -1)
+	if (!in_map)
 		return ((map->error_code = MAP_EMPTY), 0);
 	return (1);
 }

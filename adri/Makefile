@@ -24,7 +24,12 @@ SRC_FILES	= main_adri.c \
 			  utils_adri.c \
 			  free_map_adri.c \
 			  parsing_main_adri.c \
+			  color_parser_adri.c \
+			  texture_parser_adri.c \
+			  color_extractor_adri.c \
+			  texture_extractor_adri.c \
 			  parsing_identifiers_adri.c \
+			  grid_extractor_adri.c \
 			  validation_adri.c
 
 SRCS		= $(addprefix $(SRCDIR)/, $(SRC_FILES))
@@ -45,12 +50,10 @@ $(SRCDIR)/%.o: $(SRCDIR)/%.c
 clean:
 	rm -f $(OBJS)
 	@make -C $(LIBFT_DIR) clean
-	@echo "Object files removed."
 
-fclean: clean
+ fclean: clean
 	rm -f $(NAME)
 	@make -C $(LIBFT_DIR) fclean
-	@echo "Executables and archives removed."
 
 re: fclean all
 

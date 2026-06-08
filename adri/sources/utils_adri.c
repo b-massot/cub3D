@@ -6,7 +6,7 @@
 /*   By: ajeanren <ajeanren@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 12:48:44 by ajeanren          #+#    #+#             */
-/*   Updated: 2026/06/08 13:51:31 by ajeanren         ###   ########.fr       */
+/*   Updated: 2026/06/08 14:51:56 by ajeanren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	check_identifier_type(char *line)
 	return (0);
 }
 
-int	check_texture(char *line, int pos)
+/* int	check_texture(char *line, int pos)
 {
 	int	end;
 	int	len;
@@ -155,3 +155,4 @@ int	check_color(char *line, int pos)
 		return (0);
 	return (1);
 }
+ */
