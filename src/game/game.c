@@ -99,6 +99,33 @@ void	init_player(t_game *game, t_map_info *map_info)
 	}
 }
 
+//static void	draw_background(t_game *game, t_map_info *map_info)
+//{
+//	int	x;
+//	int	y;
+//	int	floor_color;
+//	int	ceiling_color;
+
+//	floor_color = (map_info->colors.floor[0] << 16)
+//		| (map_info->colors.floor[1] << 8) | map_info->colors.floor[2];
+//	ceiling_color = (map_info->colors.ceiling[0] << 16)
+//		| (map_info->colors.ceiling[1] << 8) | map_info->colors.ceiling[2];
+//	y = 0;
+//	while (y < WIN_H)
+//	{
+//		x = 0;
+//		while (x < WIN_W)
+//		{
+//			if (y < WIN_H / 2)
+//				put_pixel(&game->img, x, y, ceiling_color);
+//			else
+//				put_pixel(&game->img, x, y, floor_color);
+//			x++;
+//		}
+//		y++;
+//	}
+//}
+
 /* Charge les 4 textures XPM (north, south, west, east) et stocke dans t_game */
 int	load_textures(t_game *game, t_map_info *map_info)
 {
@@ -153,12 +180,12 @@ int	init_game(t_game *game, t_map_info *map_info)
 		return (write(2, "Error: mlx_new_image failed\n", 28), 0);
 	game->img.addr = mlx_get_data_addr(game->img.ptr, &game->img.bpp,
 			&game->img.line_len, &game->img.endian);
-	/* Charge toutes les textures XPM depuis les chemins du .cub */
 	if (!load_textures(game, map_info))
 		return (write(2, "Error: texture loading failed\n", 30), 0);
 	game->map = map_info->grid;
 	game->map_width = map_info->width;
 	game->map_height = map_info->height;
+	game->map_info = map_info;
 	init_player(game, map_info);
 	mlx_hook(game->win, 2, 1L << 0, key_press, game);
 	mlx_hook(game->win, 3, 1L << 1, key_release, game);

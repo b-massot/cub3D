@@ -131,6 +131,7 @@ typedef struct s_game
 	int			map_width;
 	int			map_height;
 	t_player	player;
+	t_map_info	*map_info;
 	int			key_w;
 	int			key_a;
 	int			key_s;
@@ -169,6 +170,8 @@ void	free_map_info(t_map_info *map);
 void	render_frame(t_game *game);
 int		is_wall(t_game *game, int x, int y);
 void	put_pixel(t_img *img, int x, int y, int color);
+int		rgb_to_color(int *rgb);
+void	draw_column_ceiling_floor(t_game *game, int x, int ceiling_height);
 
 /* --- TEXTURES --- */
 int		load_textures(t_game *game, t_map_info *map_info);

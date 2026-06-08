@@ -22,40 +22,39 @@ void	put_pixel(t_img *img, int x, int y, int color)
 	*(unsigned int *)dst = (unsigned int)color;
 }
 
-static void	draw_background(t_game *game)
+static void	render_column(t_game *game, int x)
 {
-	int	x;
-	int	y;
+	t_ray	ray;
+	int		line_height;
+	int		ceiling_height;
 
-	y = 0;
-	while (y < WIN_H)
-	{
-		x = 0;
-		while (x < WIN_W)
-		{
-			if (y < WIN_H / 2)
-				put_pixel(&game->img, x, y, 0x87CEEB);
-			else
-				put_pixel(&game->img, x, y, 0x3C2F2F);
-			x++;
-		}
-		y++;
-	}
+	init_ray(game, &ray, x);
+	set_steps_and_sidedist(game, &ray);
+	perform_dda(game, &ray);
+	if (ray.side == 0)
+		ray.perp_wall_dist = ray.side_dist_x - ray.delta_dist_x;
+	else
+		ray.perp_wall_dist = ray.side_dist_y - ray.delta_dist_y;
+	if (ray.perp_wall_dist <= 0.0001)
+		ray.perp_wall_dist = 0.0001;
+	
+	line_height = (int)(WIN_H / ray.perp_wall_dist);
+	ceiling_height = -line_height / 2 + WIN_H / 2;
+	if (ceiling_height < 0)
+		ceiling_height = 0;
+	
+	draw_column_ceiling_floor(game, x, ceiling_height);
+	draw_wall_slice(game, &ray, x);
 }
 
 void	render_frame(t_game *game)
 {
-	int		x;
-	t_ray	ray;
+	int	x;
 
-	draw_background(game);
 	x = 0;
 	while (x < WIN_W)
 	{
-		init_ray(game, &ray, x);
-		set_steps_and_sidedist(game, &ray);
-		perform_dda(game, &ray);
-		draw_wall_slice(game, &ray, x);
+		render_column(game, x);
 		x++;
 	}
 	mlx_put_image_to_window(game->mlx, game->win, game->img.ptr, 0, 0);

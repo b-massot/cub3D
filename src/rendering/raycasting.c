@@ -12,6 +12,31 @@
 
 #include "../includes/cub3d.h"
 
+int	rgb_to_color(int *rgb)
+{
+	if (!rgb)
+		return (0);
+	return ((rgb[2] << 16) | (rgb[1] << 8) | rgb[0]);
+}
+
+void	draw_column_ceiling_floor(t_game *game, int x, int ceiling_height)
+{
+	int	y;
+	int	ceiling_color;
+	int	floor_color;
+
+	if (!game->map_info->colors.ceiling || !game->map_info->colors.floor)
+		return ;
+	ceiling_color = rgb_to_color(game->map_info->colors.ceiling);
+	floor_color = rgb_to_color(game->map_info->colors.floor);
+	y = 0;
+	while (y < ceiling_height)
+		put_pixel(&game->img, x, y++, ceiling_color);
+	y = ceiling_height;
+	while (y < WIN_H)
+		put_pixel(&game->img, x, y++, floor_color);
+}
+
 int	is_wall(t_game *game, int x, int y)
 {
 	if (x < 0 || y < 0 || y >= game->map_height || x >= game->map_width)
