@@ -6,26 +6,11 @@
 /*   By: ajeanren <ajeanren@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 13:48:06 by ajeanren          #+#    #+#             */
-/*   Updated: 2026/06/08 15:09:18 by ajeanren         ###   ########.fr       */
+/*   Updated: 2026/06/08 15:17:47 by ajeanren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d_adri.h"
-
-static int	count_map_lines(t_map_info *map, int start_line)
-{
-	int	i;
-	int	count;
-
-	i = start_line;
-	count = 0;
-	while (map->file[i])
-	{
-		count++;
-		i++;
-	}
-	return (count);
-}
 
 static int	extract_map_grid(t_map_info *map, int start_line)
 {
@@ -34,7 +19,13 @@ static int	extract_map_grid(t_map_info *map, int start_line)
 	int		map_lines;
 	char	**grid;
 
-	map_lines = count_map_lines(map, start_line);
+	i = start_line;
+	map_lines = 0;
+	while (map->file[i])
+	{
+		map_lines++;
+		i++;
+	}
 	grid = malloc(sizeof(char *) * (map_lines + 1));
 	if (!grid)
 		return (0);

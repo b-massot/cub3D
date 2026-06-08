@@ -6,7 +6,7 @@
 /*   By: ajeanren <ajeanren@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 10:00:00 by ajeanren          #+#    #+#             */
-/*   Updated: 2026/06/08 15:07:15 by ajeanren         ###   ########.fr       */
+/*   Updated: 2026/06/08 15:16:58 by ajeanren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,32 +32,25 @@ static int	flood_fill(char **grid, int y, int x, int height, int width)
 	return (1);
 }
 
-static int	setup_temp_grid(char **temp_grid, t_map_info *map, int start,
-	int height, int max_w)
+static int	get_max_width(char **file, int start, int height)
 {
-	int	i;
+	int	max;
 	int	len;
+	int	i;
 
+	max = 0;
 	i = 0;
 	while (i < height)
 	{
-		temp_grid[i] = malloc(sizeof(char) * (max_w + 1));
-		if (!temp_grid[i])
-			return (free_file_array(temp_grid), 0);
-		ft_memset(temp_grid[i], '.', max_w);
-		temp_grid[i][max_w] = '\0';
-		len = ft_strlen(map->file[start + i]);
-		if (len > 0 && map->file[start + i][len - 1] == '\n')
-			len--;
-		ft_memcpy(temp_grid[i], map->file[start + i], len);
+		len = ft_strlen(file[start + i]);
+		if (len > max)
+			max = len;
 		i++;
 	}
-	temp_grid[height] = NULL;
-	return (1);
+	return (max);
 }
 
-static int	find_and_validate_player(t_map_info *map, char **temp_grid,
-	int height, int max_w)
+static int	find_player(t_map_info *map, char **temp_grid, int height, int max_w)
 {
 	int	i;
 	int	j;
@@ -86,37 +79,35 @@ static int	find_and_validate_player(t_map_info *map, char **temp_grid,
 	return (1);
 }
 
-static int	get_max_width(char **file, int start, int height)
-{
-	int	max;
-	int	len;
-	int	i;
-
-	max = 0;
-	i = 0;
-	while (i < height)
-	{
-		len = ft_strlen(file[start + i]);
-		if (len > max)
-			max = len;
-		i++;
-	}
-	return (max);
-}
-
 int	check_walls_and_player(t_map_info *map, int start, int height)
 {
 	char	**temp_grid;
 	int		max_w;
+	int		i;
+	int		len;
 
 	max_w = get_max_width(map->file, start, height);
 	temp_grid = malloc(sizeof(char *) * (height + 1));
 	if (!temp_grid)
 		return (0);
-	if (!setup_temp_grid(temp_grid, map, start, height, max_w))
-		return (0);
-	if (!find_and_validate_player(map, temp_grid, height, max_w))
-		return (free_file_array(temp_grid), (map->error_code = INVALID_MAP), 0);
+	i = 0;
+	while (i < height)
+	{
+		temp_grid[i] = malloc(sizeof(char) * (max_w + 1));
+		if (!temp_grid[i])
+			return (free_file_array(temp_grid), 0);
+		ft_memset(temp_grid[i], '.', max_w);
+		temp_grid[i][max_w] = '\0';
+		len = ft_strlen(map->file[start + i]);
+		if (len > 0 && map->file[start + i][len - 1] == '\n')
+			len--;
+		ft_memcpy(temp_grid[i], map->file[start + i], len);
+		i++;
+	}
+	temp_grid[height] = NULL;
+	if (!find_player(map, temp_grid, height, max_w))
+		return (free_file_array(temp_grid),
+			(map->error_code = INVALID_MAP), 0);
 	map->map_grid.width = max_w;
 	map->map_grid.height = height;
 	return (free_file_array(temp_grid), 1);

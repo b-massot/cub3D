@@ -6,7 +6,7 @@
 /*   By: ajeanren <ajeanren@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 10:00:00 by ajeanren          #+#    #+#             */
-/*   Updated: 2026/06/08 15:08:22 by ajeanren         ###   ########.fr       */
+/*   Updated: 2026/06/08 15:19:04 by ajeanren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	assign_texture_path(t_map_info *map, char *path, char id)
 		map->colors.east = path;
 }
 
-static int	extract_texture_path(t_map_info *map, char *line, int i, char id)
+int	extract_texture_path(t_map_info *map, char *line, int i, char id)
 {
 	int		start;
 	int		end;
@@ -34,7 +34,8 @@ static int	extract_texture_path(t_map_info *map, char *line, int i, char id)
 	while (line[i] == ' ' || line[i] == '\t')
 		i++;
 	start = i;
-	while (line[i] && line[i] != ' ' && line[i] != '\t' && line[i] != '\n')
+	while (line[i] && line[i] != ' ' && line[i] != '\t'
+		&& line[i] != '\n')
 		i++;
 	end = i;
 	len = end - start;
