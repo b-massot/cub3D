@@ -30,7 +30,8 @@ SRC_FILES	= main_adri.c \
 			  texture_extractor_adri.c \
 			  parsing_identifiers_adri.c \
 			  grid_extractor_adri.c \
-			  validation_adri.c
+			  validation_adri.c \
+			  walls_check_adri.c \
 
 SRCS		= $(addprefix $(SRCDIR)/, $(SRC_FILES))
 OBJS		= $(SRCS:.c=.o)

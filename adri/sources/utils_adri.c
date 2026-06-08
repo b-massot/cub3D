@@ -6,7 +6,7 @@
 /*   By: ajeanren <ajeanren@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 12:48:44 by ajeanren          #+#    #+#             */
-/*   Updated: 2026/06/08 14:51:56 by ajeanren         ###   ########.fr       */
+/*   Updated: 2026/06/08 14:54:49 by ajeanren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,65 +94,3 @@ int	check_identifier_type(char *line)
 		return (1);
 	return (0);
 }
-
-/* int	check_texture(char *line, int pos)
-{
-	int	end;
-	int	len;
-
-	while (line[pos] == ' ' || line[pos] == '\t')
-		pos++;
-	if (line[pos] == '\0' || line[pos] == '\n')
-		return (0);
-	end = (int)ft_strlen(line) - 1;
-	while (end >= pos
-		&& (line[end] == ' ' || line[end] == '\t' || line[end] == '\n'))
-	{
-		line[end] = '\0';
-		end--;
-	}
-	if (end < pos)
-		return (0);
-	len = (int)ft_strlen(&line[pos]);
-	if (len < 5)
-		return (0);
-	if (ft_strncmp(&line[pos + len - 4], ".xpm", 4) != 0)
-		return (0);
-	return (check_path(&line[pos]));
-}
-
-int	check_color(char *line, int pos)
-{
-	int	value;
-	int	count;
-
-	count = 0;
-	while (line[pos] == ' ' || line[pos] == '\t')
-		pos++;
-	while (count < 3)
-	{
-		if (line[pos] < '0' || line[pos] > '9')
-			return (0);
-		value = 0;
-		while (line[pos] >= '0' && line[pos] <= '9')
-		{
-			value = value * 10 + (line[pos] - '0');
-			pos++;
-		}
-		if (value < 0 || value > 255)
-			return (0);
-		while (line[pos] == ' ' || line[pos] == '\t')
-			pos++;
-		if (count < 2 && line[pos] != ',')
-			return (0);
-		if (count < 2)
-			pos++;
-		while (line[pos] == ' ' || line[pos] == '\t')
-			pos++;
-		count++;
-	}
-	if (line[pos] != '\0' && line[pos] != '\n')
-		return (0);
-	return (1);
-}
- */

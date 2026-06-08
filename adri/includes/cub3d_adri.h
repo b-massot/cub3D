@@ -6,7 +6,7 @@
 /*   By: ajeanren <ajeanren@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 09:25:05 by ajeanren          #+#    #+#             */
-/*   Updated: 2026/06/08 14:51:11 by ajeanren         ###   ########.fr       */
+/*   Updated: 2026/06/08 15:05:31 by ajeanren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ int		check_texture(char *line, int pos);
 int		check_identifier_type(char *line);
 int		check_empty_line(char *line);
 int		extract_color_values(t_map_info *map, char *line, int i, char id);
-//int		extract_map_grid(t_map_info *map, int start_line);
 int		validate_map_content(t_map_info *map, int start_line);
+int		check_walls_and_player(t_map_info *map, int start, int height);
+
 
 #endif

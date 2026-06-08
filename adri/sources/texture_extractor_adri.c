@@ -6,11 +6,23 @@
 /*   By: ajeanren <ajeanren@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 10:00:00 by ajeanren          #+#    #+#             */
-/*   Updated: 2026/06/08 14:48:24 by ajeanren         ###   ########.fr       */
+/*   Updated: 2026/06/08 15:08:22 by ajeanren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d_adri.h"
+
+static void	assign_texture_path(t_map_info *map, char *path, char id)
+{
+	if (id == 'N')
+		map->colors.north = path;
+	else if (id == 'S')
+		map->colors.south = path;
+	else if (id == 'W')
+		map->colors.west = path;
+	else if (id == 'E')
+		map->colors.east = path;
+}
 
 static int	extract_texture_path(t_map_info *map, char *line, int i, char id)
 {
@@ -32,14 +44,7 @@ static int	extract_texture_path(t_map_info *map, char *line, int i, char id)
 	if (!path)
 		return ((map->error_code = FAILED_MEMORY_ALLOCATION), 0);
 	ft_strlcpy(path, &line[start], len + 1);
-	if (id == 'N')
-		map->colors.north = path;
-	else if (id == 'S')
-		map->colors.south = path;
-	else if (id == 'W')
-		map->colors.west = path;
-	else if (id == 'E')
-		map->colors.east = path;
+	assign_texture_path(map, path, id);
 	return (1);
 }
 
