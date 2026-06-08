@@ -82,13 +82,28 @@ void	perform_dda(t_game *game, t_ray *ray)
 	}
 }
 
+int	get_pixel_color(t_img *img, int x, int y)
+{
+	char	*pixel;
+	int		color;
+
+	pixel = img->addr + (y * img->line_len + x * (img->bpp / 8));
+	color = *(int *)pixel;
+	return (color);
+}
+
 void	draw_wall_slice(t_game *game, t_ray *ray, int x)
 {
-	int	line_height;
-	int	draw_start;
-	int	draw_end;
-	int	wall_color;
-	int	y;
+	int		line_height;
+	int		draw_start;
+	int		draw_end;
+	int		y;
+	int		tex_x;
+	int		tex_y;
+	t_img	*texture;
+	double	wall_x;
+	double	tex_pos;
+	double	step;
 
 	if (ray->side == 0)
 		ray->perp_wall_dist = ray->side_dist_x - ray->delta_dist_x;
@@ -96,20 +111,57 @@ void	draw_wall_slice(t_game *game, t_ray *ray, int x)
 		ray->perp_wall_dist = ray->side_dist_y - ray->delta_dist_y;
 	if (ray->perp_wall_dist <= 0.0001)
 		ray->perp_wall_dist = 0.0001;
+	
 	line_height = (int)(WIN_H / ray->perp_wall_dist);
 	draw_start = -line_height / 2 + WIN_H / 2;
 	draw_end = line_height / 2 + WIN_H / 2;
-	wall_color = 0xD2B48C;
-	if (ray->side == 1)
-		wall_color = 0xA28264;
 	if (draw_start < 0)
 		draw_start = 0;
 	if (draw_end >= WIN_H)
 		draw_end = WIN_H - 1;
+	
+	/* Determine la texture et calcule wallX */
+	if (ray->side == 0)
+	{
+		if (ray->ray_dir_x > 0)
+			texture = &game->tex_east;
+		else
+			texture = &game->tex_west;
+		wall_x = game->player.y + ray->perp_wall_dist * ray->ray_dir_y;
+	}
+	else
+	{
+		if (ray->ray_dir_y > 0)
+			texture = &game->tex_south;
+		else
+			texture = &game->tex_north;
+		wall_x = game->player.x + ray->perp_wall_dist * ray->ray_dir_x;
+	}
+	wall_x -= floor(wall_x);
+	
+	/* Calcule la coordonnee X sur la texture */
+	tex_x = (int)(wall_x * 64);
+	if (tex_x < 0)
+		tex_x = 0;
+	if (tex_x >= 64)
+		tex_x = 63;
+	
+	/* Mirroring correction selon direction */
+	if (ray->side == 0 && ray->ray_dir_x > 0)
+		tex_x = 64 - tex_x - 1;
+	if (ray->side == 1 && ray->ray_dir_y < 0)
+		tex_x = 64 - tex_x - 1;
+	
+	/* Boucle Y avec affine texture mapping */
+	step = 1.0 * 64 / line_height;
+	tex_pos = (double)(draw_start - WIN_H / 2 + line_height / 2) * step;
+	
 	y = draw_start;
 	while (y <= draw_end)
 	{
-		put_pixel(&game->img, x, y, wall_color);
+		tex_y = (int)tex_pos & 63;
+		tex_pos += step;
+		put_pixel(&game->img, x, y, get_pixel_color(texture, tex_x, tex_y));
 		y++;
 	}
 }

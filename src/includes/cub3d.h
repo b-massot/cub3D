@@ -37,7 +37,7 @@
 # define RIGHT 65363
 
 /* ============= GAME CONSTANTS ============= */
-# define MOVE_SPEED 0.08
+# define MOVE_SPEED 0.03
 # define ROT_SPEED 0.03
 
 /* ============= ERROR CODES ============= */

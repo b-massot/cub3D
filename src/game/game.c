@@ -36,10 +36,11 @@ void	try_move(t_game *game, double move_x, double move_y)
 
 	next_x = game->player.x + move_x;
 	next_y = game->player.y + move_y;
-	if (!is_wall(game, (int)next_x, (int)game->player.y))
+	if (!is_wall(game, (int)next_x, (int)next_y))
+	{
 		game->player.x = next_x;
-	if (!is_wall(game, (int)game->player.x, (int)next_y))
 		game->player.y = next_y;
+	}
 }
 
 void	update_player(t_game *game)
