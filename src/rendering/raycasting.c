@@ -16,7 +16,7 @@ int	rgb_to_color(int *rgb)
 {
 	if (!rgb)
 		return (0);
-	return ((rgb[2] << 16) | (rgb[1] << 8) | rgb[0]);
+	return ((rgb[0] << 16) | (rgb[1] << 8) | rgb[2]);
 }
 
 void	draw_column_ceiling_floor(t_game *game, int x, int ceiling_height)
