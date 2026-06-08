@@ -14,9 +14,9 @@
 
 int	is_wall(t_game *game, int x, int y)
 {
-	if (x < 0 || y < 0 || y >= game->map.height || x >= game->map.width)
+	if (x < 0 || y < 0 || y >= game->map_height || x >= game->map_width)
 		return (1);
-	return (game->map.grid[y][x] == '1');
+	return (game->map[y][x] == '1');
 }
 
 void	init_ray(t_game *game, t_ray *ray, int x)
@@ -100,7 +100,7 @@ void	draw_wall_slice(t_game *game, t_ray *ray, int x)
 	int		y;
 	int		tex_x;
 	int		tex_y;
-	t_img	*texture;
+	int		tex_idx;
 	double	wall_x;
 	double	tex_pos;
 	double	step;
@@ -120,21 +120,21 @@ void	draw_wall_slice(t_game *game, t_ray *ray, int x)
 	if (draw_end >= WIN_H)
 		draw_end = WIN_H - 1;
 	
-	/* Determine la texture et calcule wallX */
+	/* Determine l'indice de texture (0=N, 1=S, 2=W, 3=E) */
 	if (ray->side == 0)
 	{
 		if (ray->ray_dir_x > 0)
-			texture = &game->tex_east;
+			tex_idx = 3;
 		else
-			texture = &game->tex_west;
+			tex_idx = 2;
 		wall_x = game->player.y + ray->perp_wall_dist * ray->ray_dir_y;
 	}
 	else
 	{
 		if (ray->ray_dir_y > 0)
-			texture = &game->tex_south;
+			tex_idx = 1;
 		else
-			texture = &game->tex_north;
+			tex_idx = 0;
 		wall_x = game->player.x + ray->perp_wall_dist * ray->ray_dir_x;
 	}
 	wall_x -= floor(wall_x);
@@ -161,7 +161,7 @@ void	draw_wall_slice(t_game *game, t_ray *ray, int x)
 	{
 		tex_y = (int)tex_pos & 63;
 		tex_pos += step;
-		put_pixel(&game->img, x, y, get_pixel_color(texture, tex_x, tex_y));
+		put_pixel(&game->img, x, y, get_pixel_color(&game->textures[tex_idx], tex_x, tex_y));
 		y++;
 	}
 }

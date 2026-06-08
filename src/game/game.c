@@ -65,32 +65,32 @@ void	update_player(t_game *game)
 
 void	init_player(t_game *game, t_map_info *map_info)
 {
-	game->player.x = map_info->player.x + 0.5;
-	game->player.y = map_info->player.y + 0.5;
-	game->player.direction = map_info->player.direction;
+	game->player.x = map_info->player_x + 0.5;
+	game->player.y = map_info->player_y + 0.5;
+	game->player.direction = map_info->player_dir;
 	
-	if (map_info->player.direction == 'N')
+	if (map_info->player_dir == 'N')
 	{
 		game->player.dir_x = 0.0;
 		game->player.dir_y = -1.0;
 		game->player.plane_x = 0.66;
 		game->player.plane_y = 0.0;
 	}
-	else if (map_info->player.direction == 'S')
+	else if (map_info->player_dir == 'S')
 	{
 		game->player.dir_x = 0.0;
 		game->player.dir_y = 1.0;
 		game->player.plane_x = -0.66;
 		game->player.plane_y = 0.0;
 	}
-	else if (map_info->player.direction == 'E')
+	else if (map_info->player_dir == 'E')
 	{
 		game->player.dir_x = 1.0;
 		game->player.dir_y = 0.0;
 		game->player.plane_x = 0.0;
 		game->player.plane_y = 0.66;
 	}
-	else if (map_info->player.direction == 'W')
+	else if (map_info->player_dir == 'W')
 	{
 		game->player.dir_x = -1.0;
 		game->player.dir_y = 0.0;
@@ -105,37 +105,37 @@ int	load_textures(t_game *game, t_map_info *map_info)
 	int	width;
 	int	height;
 
-	game->tex_north.ptr = mlx_xpm_file_to_image(game->mlx,
+	game->textures[0].ptr = mlx_xpm_file_to_image(game->mlx,
 			map_info->colors.north, &width, &height);
-	if (!game->tex_north.ptr)
+	if (!game->textures[0].ptr)
 		return (0);
-	game->tex_north.addr = mlx_get_data_addr(game->tex_north.ptr,
-			&game->tex_north.bpp, &game->tex_north.line_len,
-			&game->tex_north.endian);
+	game->textures[0].addr = mlx_get_data_addr(game->textures[0].ptr,
+			&game->textures[0].bpp, &game->textures[0].line_len,
+			&game->textures[0].endian);
 	
-	game->tex_south.ptr = mlx_xpm_file_to_image(game->mlx,
+	game->textures[1].ptr = mlx_xpm_file_to_image(game->mlx,
 			map_info->colors.south, &width, &height);
-	if (!game->tex_south.ptr)
+	if (!game->textures[1].ptr)
 		return (0);
-	game->tex_south.addr = mlx_get_data_addr(game->tex_south.ptr,
-			&game->tex_south.bpp, &game->tex_south.line_len,
-			&game->tex_south.endian);
+	game->textures[1].addr = mlx_get_data_addr(game->textures[1].ptr,
+			&game->textures[1].bpp, &game->textures[1].line_len,
+			&game->textures[1].endian);
 	
-	game->tex_west.ptr = mlx_xpm_file_to_image(game->mlx,
+	game->textures[2].ptr = mlx_xpm_file_to_image(game->mlx,
 			map_info->colors.west, &width, &height);
-	if (!game->tex_west.ptr)
+	if (!game->textures[2].ptr)
 		return (0);
-	game->tex_west.addr = mlx_get_data_addr(game->tex_west.ptr,
-			&game->tex_west.bpp, &game->tex_west.line_len,
-			&game->tex_west.endian);
+	game->textures[2].addr = mlx_get_data_addr(game->textures[2].ptr,
+			&game->textures[2].bpp, &game->textures[2].line_len,
+			&game->textures[2].endian);
 	
-	game->tex_east.ptr = mlx_xpm_file_to_image(game->mlx,
+	game->textures[3].ptr = mlx_xpm_file_to_image(game->mlx,
 			map_info->colors.east, &width, &height);
-	if (!game->tex_east.ptr)
+	if (!game->textures[3].ptr)
 		return (0);
-	game->tex_east.addr = mlx_get_data_addr(game->tex_east.ptr,
-			&game->tex_east.bpp, &game->tex_east.line_len,
-			&game->tex_east.endian);
+	game->textures[3].addr = mlx_get_data_addr(game->textures[3].ptr,
+			&game->textures[3].bpp, &game->textures[3].line_len,
+			&game->textures[3].endian);
 	
 	return (1);
 }
@@ -156,7 +156,9 @@ int	init_game(t_game *game, t_map_info *map_info)
 	/* Charge toutes les textures XPM depuis les chemins du .cub */
 	if (!load_textures(game, map_info))
 		return (write(2, "Error: texture loading failed\n", 30), 0);
-	game->map = map_info->map_grid;
+	game->map = map_info->grid;
+	game->map_width = map_info->width;
+	game->map_height = map_info->height;
 	init_player(game, map_info);
 	mlx_hook(game->win, 2, 1L << 0, key_press, game);
 	mlx_hook(game->win, 3, 1L << 1, key_release, game);

@@ -72,23 +72,7 @@ typedef struct s_map_color
 	char	*east;
 }	t_map_color;
 
-/* ============= MAP GRID ============= */
-typedef struct s_map_grid
-{
-	char	**grid;
-	int		width;
-	int		height;
-}	t_map_grid;
-
-/* ============= PLAYER (FROM PARSING) ============= */
-typedef struct s_map_player
-{
-	char	direction;
-	double	x;
-	double	y;
-}	t_map_player;
-
-/* ============= PLAYER (GAME STATE) ============= */
+/* ============= PLAYER ============= */
 typedef struct s_player
 {
 	double	x;
@@ -129,9 +113,11 @@ typedef struct s_map_info
 	int			height;
 	int			width;
 	int			error_code;
-	t_map_grid	map_grid;
+	char		**grid;
 	t_map_color	colors;
-	t_map_player	player;
+	double		player_x;
+	double		player_y;
+	char		player_dir;
 }	t_map_info;
 
 /* ============= MAIN GAME STRUCTURE ============= */
@@ -140,12 +126,10 @@ typedef struct s_game
 	void		*mlx;
 	void		*win;
 	t_img		img;
-	/* Textures XPM chargees depuis les chemins du fichier .cub */
-	t_img		tex_north;
-	t_img		tex_south;
-	t_img		tex_west;
-	t_img		tex_east;
-	t_map_grid	map;
+	t_img		textures[4];
+	char		**map;
+	int			map_width;
+	int			map_height;
 	t_player	player;
 	int			key_w;
 	int			key_a;
@@ -180,7 +164,6 @@ int		print_error(char *message, int error_code);
 void	free_file_array(char **file);
 void	free_map_colors(t_map_color *colors);
 void	free_map_info(t_map_info *map);
-void	free_map_grid(t_map_grid *grid);
 
 /* --- RENDERING --- */
 void	render_frame(t_game *game);

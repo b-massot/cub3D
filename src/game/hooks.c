@@ -62,14 +62,11 @@ int	close_window(void *param)
 	if (game->img.ptr)
 		mlx_destroy_image(game->mlx, game->img.ptr);
 	/* Detruit les 4 textures pour eviter les fuites memoire */
-	if (game->tex_north.ptr)
-		mlx_destroy_image(game->mlx, game->tex_north.ptr);
-	if (game->tex_south.ptr)
-		mlx_destroy_image(game->mlx, game->tex_south.ptr);
-	if (game->tex_west.ptr)
-		mlx_destroy_image(game->mlx, game->tex_west.ptr);
-	if (game->tex_east.ptr)
-		mlx_destroy_image(game->mlx, game->tex_east.ptr);
+	for (int i = 0; i < 4; i++)
+	{
+		if (game->textures[i].ptr)
+			mlx_destroy_image(game->mlx, game->textures[i].ptr);
+	}
 	if (game->win)
 		mlx_destroy_window(game->mlx, game->win);
 	if (game->mlx)
@@ -77,7 +74,6 @@ int	close_window(void *param)
 		mlx_destroy_display(game->mlx);
 		free(game->mlx);
 	}
-	free_map_grid(&game->map);
 	exit(0);
 	return (0);
 }

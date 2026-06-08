@@ -201,9 +201,9 @@ static int	check_walls_and_player(t_map_info *map, int start, int height)
 			{
 				p_x = j;
 				p_y = i;
-				map->player.direction = temp_grid[i][j];
-				map->player.x = (double)p_x;
-				map->player.y = (double)p_y;
+				map->player_dir = temp_grid[i][j];
+				map->player_x = (double)p_x;
+				map->player_y = (double)p_y;
 				temp_grid[i][j] = '0';
 			}
 		}
@@ -211,9 +211,9 @@ static int	check_walls_and_player(t_map_info *map, int start, int height)
 	temp_grid[height] = NULL;
 	if (p_y == -1 || !flood_fill(temp_grid, p_y, p_x, height, max_w))
 		return (free_file_array(temp_grid), (map->error_code = INVALID_MAP), 0);
-	map->map_grid.width = max_w;
-	map->map_grid.height = height;
-	map->map_grid.grid = temp_grid;
+	map->width = max_w;
+	map->height = height;
+	map->grid = temp_grid;
 	return (1);
 }
 

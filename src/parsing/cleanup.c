@@ -75,17 +75,6 @@ void	free_map_colors(t_map_color *colors)
 		free(colors->ceiling);
 }
 
-void	free_map_grid(t_map_grid *grid)
-{
-	if (!grid)
-		return ;
-	if (grid->grid)
-	{
-		free_file_array(grid->grid);
-		grid->grid = NULL;
-	}
-}
-
 void	free_map_info(t_map_info *map)
 {
 	if (!map)
@@ -95,7 +84,11 @@ void	free_map_info(t_map_info *map)
 		free_file_array(map->file);
 		map->file = NULL;
 	}
-	free_map_grid(&map->map_grid);
+	if (map->grid)
+	{
+		free_file_array(map->grid);
+		map->grid = NULL;
+	}
 	free_map_colors(&map->colors);
 	if (map->fd > 0)
 		close(map->fd);
